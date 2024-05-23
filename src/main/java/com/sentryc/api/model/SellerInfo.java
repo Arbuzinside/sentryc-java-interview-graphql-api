@@ -1,6 +1,7 @@
 package com.sentryc.api.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "seller_infos")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class SellerInfo {

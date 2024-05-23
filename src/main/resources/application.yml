@@ -1,3 +1,9 @@
 spring:
   application:
     name: graphql-api
+
+
+graphql:
+  servlet:
+    mapping: /graphql
+    enabled: true

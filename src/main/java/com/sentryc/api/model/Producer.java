@@ -2,6 +2,7 @@ package com.sentryc.api.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Table(name = "producers")
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Producer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

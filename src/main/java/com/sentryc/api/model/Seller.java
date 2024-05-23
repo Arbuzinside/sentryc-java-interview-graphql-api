@@ -1,15 +1,14 @@
 package com.sentryc.api.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
 @Entity
 @Table(name = "sellers")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Seller {
