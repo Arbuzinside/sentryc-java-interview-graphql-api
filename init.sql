@@ -1,7 +1,17 @@
+DROP DATABASE IF EXISTS sentryc_interview;
 CREATE DATABASE sentryc_interview;
 
+-- Switch to the newly created database
+\c sentryc_interview;
 
-create table public.producers
+-- Drop tables if they exist
+DROP TABLE IF EXISTS sellers;
+DROP TABLE IF EXISTS seller_infos;
+DROP TABLE IF EXISTS marketplaces;
+DROP TABLE IF EXISTS producers;
+
+-- Create tables
+create table producers
 (
     id         uuid      not null
         constraint "producersPK"
@@ -10,23 +20,22 @@ create table public.producers
     created_at timestamp not null
 );
 
-
-create table public.marketplaces
+create table marketplaces
 (
-    id                                    varchar(255)                                  not null
+    id         varchar(255) not null
         constraint "marketplacesPK"
             primary key,
-    description                                  varchar(255)
+    description varchar(255)
 );
 
-create table public.seller_infos
+create table seller_infos
 (
     id                    uuid          not null
         constraint "seller_infosPK"
             primary key,
     marketplace_id        varchar(255)
         constraint "FKr8ekbqgwa3g0uhgbaa1tchf09"
-            references public.marketplaces,
+            references marketplaces,
     name                  varchar(2048) not null,
     url                   varchar(2048),
     country               varchar(255),
@@ -35,18 +44,16 @@ create table public.seller_infos
         unique (marketplace_id, external_id)
 );
 
-
-
-create table public.sellers
+create table sellers
 (
-    id               uuid                                              not null
+    id               uuid      not null
         constraint "marketplace_sellersPK"
             primary key,
-    producer_id      uuid                                              not null
+    producer_id      uuid      not null
         constraint "FK6y70nxr3lhubusfq6ub427ien"
-            references public.producers,
+            references producers,
     seller_info_id   uuid
         constraint "FKp2fkfcqcndx9x9xkhk5va3cq4"
-            references public.seller_infos,
+            references seller_infos,
     state            varchar(255) default 'REGULAR'::character varying not null
 );

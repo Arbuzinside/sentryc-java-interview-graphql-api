@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Docker container name
-CONTAINER_NAME="postgres-P6zZ"
+CONTAINER_NAME="postgres"
 
 # Database connection details
 DB_NAME="sentryc_interview"
