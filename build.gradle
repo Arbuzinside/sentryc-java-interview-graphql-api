@@ -17,6 +17,12 @@ configurations {
 	}
 }
 
+processResources {
+	filesMatching("**/application.properties") {
+		expand( project.properties )
+	}
+}
+
 repositories {
 	mavenCentral()
 	maven { url 'https://repo.spring.io/snapshot' }
