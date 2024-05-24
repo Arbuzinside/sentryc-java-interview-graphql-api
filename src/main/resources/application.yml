@@ -1,6 +1,10 @@
 spring:
   application:
     name: graphql-api
+  security:
+    user:
+      name: user
+      password: password
   datasource:
     url: jdbc:postgresql://localhost:5432/sentryc_interview
     username: postgres
