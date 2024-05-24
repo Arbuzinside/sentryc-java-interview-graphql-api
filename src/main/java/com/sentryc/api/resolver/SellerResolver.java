@@ -1,14 +1,15 @@
 package com.sentryc.api.resolver;
 
-import com.sentryc.api.model.Seller;
+import com.sentryc.api.resolver.model.PageInput;
+import com.sentryc.api.resolver.model.SellerFilter;
+import com.sentryc.api.resolver.model.SellerPageableResponse;
+import com.sentryc.api.resolver.model.SellerSortBy;
 import com.sentryc.api.service.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
-import java.util.List;
-import java.util.UUID;
 
 @Controller
 public class SellerResolver {
@@ -17,23 +18,21 @@ public class SellerResolver {
     private SellerService sellerService;
 
     @QueryMapping
-    public List<Seller> sellersByState(@Argument String state) {
-        return sellerService.getSellersByState(state);
-    }
+    public SellerPageableResponse sellers(@Argument SellerFilter filter,
+                                          @Argument PageInput page,
+                                          @Argument SellerSortBy sortBy) {
+        if (filter == null) {
+            filter = new SellerFilter();
+        }
+        if (page == null) {
+            page = new PageInput(0, Integer.MAX_VALUE);
+        }
+        if (sortBy == null) {
+            sortBy = SellerSortBy.UNSORTED; // Adjust default sorting as needed
+        }
 
-    @QueryMapping
-    public List<Seller> sellersByProducerId(@Argument UUID producerId) {
-        return sellerService.getSellersByProducerId(producerId);
-    }
+        var sellersPage = sellerService.getSellers(filter, page, sortBy);
 
-    @QueryMapping
-    public List<Seller> sellersBySellerInfoId(@Argument UUID sellerInfoId) {
-        return sellerService.getSellersBySellerInfoId(sellerInfoId);
-    }
-
-    @QueryMapping
-    public List<Seller> sellersByProducerIdAndState(@Argument UUID producerId, @Argument String state) {
-        return sellerService.getSellersByProducerIdAndState(producerId, state);
+        return SellerPageableResponse.fromSellersPage(sellersPage);
     }
 }
-

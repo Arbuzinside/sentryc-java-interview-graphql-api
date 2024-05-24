@@ -1,35 +1,54 @@
 type Query {
-    sellersByState(state: String!): [Seller]
-    sellersByProducerId(producerId: ID!): [Seller]
-    sellersBySellerInfoId(sellerInfoId: ID!): [Seller]
-    sellersByProducerIdAndState(producerId: ID!, state: String!): [Seller]
-    sellersByCountry(country: String!): [Seller]
-    sellersByUrl(url: String!): [Seller]
+    sellers(filter: SellerFilter, page: PageInput!, sortBy: SellerSortBy): SellerPageableResponse!
+}
+
+input SellerFilter {
+    searchByName: String
+    producerIds: [ID]
+    marketplaceIds: [String]
+}
+
+input PageInput {
+    page: Int!
+    size: Int!
+}
+
+enum SellerSortBy {
+    SELLER_INFO_EXTERNAL_ID_ASC,
+    SELLER_INFO_EXTERNAL_ID_DESC,
+    NAME_ASC,
+    NAME_DESC,
+    MARKETPLACE_ID_ASC,
+    MARKETPLACE_ID_DESC,
+}
+
+type SellerPageableResponse {
+    meta: PageMeta!
+    data: [Seller!]!
+}
+
+type PageMeta {
+    totalPages: Int!
+    totalElements: Int!
 }
 
 type Seller {
-    id: ID!
-    producer: Producer!
-    sellerInfo: SellerInfo!
-    state: String!
-}
-
-type Producer {
-    id: ID!
-    name: String!
-    createdAt: String!
-}
-
-type Marketplace {
-    id: ID!
-    description: String!
-}
-
-type SellerInfo {
-    id: ID!
-    marketplace: Marketplace!
-    name: String!
-    url: String!
-    country: String!
+    sellerName: String
     externalId: String!
+    producerSellerStates: [ProducerSellerState]!
+    marketplaceId: String
+}
+
+type ProducerSellerState {
+    producerId: ID!
+    producerName: String!
+    sellerState: SellerState!
+    sellerId: ID!
+}
+
+enum SellerState {
+    REGULAR
+    WHITELISTED
+    GREYLISTED
+    BLACKLISTED
 }
