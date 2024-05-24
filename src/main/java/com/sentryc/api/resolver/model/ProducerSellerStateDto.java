@@ -17,10 +17,10 @@ public class ProducerSellerStateDto {
     private SellerState sellerState;
     private String sellerId;
 
-    public static ProducerSellerStateDto from(Seller seller, Producer producer){
+    public static ProducerSellerStateDto from(Seller seller){
         return ProducerSellerStateDto.builder()
-                .producerId(producer.getId().toString())
-                .producerName(producer.getName())
+                .producerId(seller.getProducer().getId().toString())
+                .producerName(seller.getProducer().getName())
                 .sellerState(SellerState.valueOf(seller.getState()))
                 .sellerId(seller.getId().toString())
                 .build();

@@ -16,7 +16,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)  // Disable CSRF protection
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/graphql/**").authenticated()  // Require authentication for /graphql/**
+                        .requestMatchers("/graphql/**")
+                        .authenticated()  // Require authentication for /graphql/**
                 )
                 .httpBasic(httpBasic -> httpBasic.realmName("GraphQL API"));  // Enable HTTP Basic authentication with a custom realm name
         return http.build();

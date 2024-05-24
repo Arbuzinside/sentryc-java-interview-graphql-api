@@ -28,11 +28,9 @@ public class SellerResolver {
             page = new PageInput(0, Integer.MAX_VALUE);
         }
         if (sortBy == null) {
-            sortBy = SellerSortBy.UNSORTED; // Adjust default sorting as needed
+            sortBy = SellerSortBy.UNSORTED;
         }
 
-        var sellersPage = sellerService.getSellers(filter, page, sortBy);
-
-        return SellerPageableResponse.fromSellersPage(sellersPage);
+        return sellerService.getSellers(filter, page, sortBy);
     }
 }

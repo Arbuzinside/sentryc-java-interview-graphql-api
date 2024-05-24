@@ -28,9 +28,12 @@ type SellerPageableResponse {
 }
 
 type PageMeta {
+    currentPage: Int!
+    pageSize: Int!
     totalPages: Int!
     totalElements: Int!
 }
+
 
 type Seller {
     sellerName: String
