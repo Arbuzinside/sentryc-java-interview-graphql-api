@@ -7,27 +7,30 @@ CONTAINER_NAME="postgres"
 DB_NAME="sentryc_interview"
 DB_USER="postgres"
 
+# Temporary SQL file
+TEMP_SQL_FILE=$(mktemp)
+
 # Generate a random UUID
 generate_uuid() {
     uuidgen
 }
 
-# Generate random data and insert into database
+# Generate random data and append to SQL file
 for i in {1..1000}; do
     # Generate random data for producers
     producer_id=$(generate_uuid)
     producer_name="Producer_$i"
     created_at=$(date +'%Y-%m-%d %H:%M:%S')
 
-    # Insert into producers table
-    docker exec -i $CONTAINER_NAME psql -U $DB_USER -d $DB_NAME -c "INSERT INTO public.producers (id, name, created_at) VALUES ('$producer_id', '$producer_name', '$created_at');"
+    # Append to SQL file
+    echo "INSERT INTO producers (id, name, created_at) VALUES ('$producer_id', '$producer_name', '$created_at');" >> $TEMP_SQL_FILE
 
     # Generate random data for marketplaces
     marketplace_id=$(generate_uuid)
     marketplace_description="Description for Marketplace $i"
 
-    # Insert into marketplaces table
-    docker exec -i $CONTAINER_NAME psql -U $DB_USER -d $DB_NAME -c "INSERT INTO public.marketplaces (id, description) VALUES ('$marketplace_id', '$marketplace_description');"
+    # Append to SQL file
+    echo "INSERT INTO marketplaces (id, description) VALUES ('$marketplace_id', '$marketplace_description');" >> $TEMP_SQL_FILE
 
     # Generate random data for seller_infos
     seller_info_id=$(generate_uuid)
@@ -36,15 +39,23 @@ for i in {1..1000}; do
     seller_info_country="Country_$i"
     seller_info_external_id="External_$i"
 
-    # Insert into seller_infos table
-    docker exec -i $CONTAINER_NAME psql -U $DB_USER -d $DB_NAME -c "INSERT INTO public.seller_infos (id, marketplace_id, name, url, country, external_id) VALUES ('$seller_info_id', '$marketplace_id', '$seller_info_name', '$seller_info_url', '$seller_info_country', '$seller_info_external_id');"
+    # Append to SQL file
+    echo "INSERT INTO seller_infos (id, marketplace_id, name, url, country, external_id) VALUES ('$seller_info_id', '$marketplace_id', '$seller_info_name', '$seller_info_url', '$seller_info_country', '$seller_info_external_id');" >> $TEMP_SQL_FILE
 
     # Generate random data for sellers
     seller_id=$(generate_uuid)
     seller_state="REGULAR"
 
-    # Insert into sellers table
-    docker exec -i $CONTAINER_NAME psql -U $DB_USER -d $DB_NAME -c "INSERT INTO public.sellers (id, producer_id, seller_info_id, state) VALUES ('$seller_id', '$producer_id', '$seller_info_id', '$seller_state');"
+    # Append to SQL file
+    echo "INSERT INTO sellers (id, producer_id, seller_info_id, state) VALUES ('$seller_id', '$producer_id', '$seller_info_id', '$seller_state');" >> $TEMP_SQL_FILE
 done
+
+# Execute all insert commands in a single docker exec call
+docker cp $TEMP_SQL_FILE $CONTAINER_NAME:/temp_insert.sql
+docker exec -i $CONTAINER_NAME psql -U $DB_USER -d $DB_NAME -f /temp_insert.sql
+
+# Clean up
+rm $TEMP_SQL_FILE
+docker exec -i $CONTAINER_NAME rm /temp_insert.sql
 
 echo "Database populated with 1000 entries of random data."
