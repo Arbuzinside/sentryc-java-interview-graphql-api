@@ -1,4 +1,4 @@
-package com.sentryc.api.resolver.model;
+package com.sentryc.api.model.dto;
 
 public enum SellerState {
     REGULAR,

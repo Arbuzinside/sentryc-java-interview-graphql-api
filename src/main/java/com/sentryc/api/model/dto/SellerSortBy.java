@@ -1,4 +1,4 @@
-package com.sentryc.api.resolver.model;
+package com.sentryc.api.model.dto;
 
 public enum SellerSortBy {
     SELLER_INFO_EXTERNAL_ID_ASC,

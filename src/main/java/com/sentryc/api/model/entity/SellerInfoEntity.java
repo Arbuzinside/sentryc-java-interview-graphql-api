@@ -1,4 +1,4 @@
-package com.sentryc.api.model;
+package com.sentryc.api.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -14,14 +14,14 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SellerInfo {
+public class SellerInfoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "marketplace_id")
-    private Marketplace marketplace;
+    private MarketplaceEntity marketplace;
 
     private String name;
     private String url;

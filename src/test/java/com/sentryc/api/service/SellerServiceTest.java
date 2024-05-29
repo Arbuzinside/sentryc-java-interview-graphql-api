@@ -1,11 +1,14 @@
 package com.sentryc.api.service;
 
-import com.sentryc.api.model.Marketplace;
-import com.sentryc.api.model.Producer;
-import com.sentryc.api.model.Seller;
-import com.sentryc.api.model.SellerInfo;
+import com.sentryc.api.model.entity.MarketplaceEntity;
+import com.sentryc.api.model.entity.ProducerEntity;
+import com.sentryc.api.model.entity.SellerEntity;
+import com.sentryc.api.model.entity.SellerInfoEntity;
+import com.sentryc.api.model.dto.PageInput;
+import com.sentryc.api.model.dto.SellerFilter;
+import com.sentryc.api.model.dto.SellerPageableResponse;
+import com.sentryc.api.model.dto.SellerSortBy;
 import com.sentryc.api.repository.SellerRepository;
-import com.sentryc.api.resolver.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -45,7 +48,7 @@ class SellerServiceTest {
         var sortBy = SellerSortBy.NAME_ASC;
         var seller = initTestSeller();
 
-        Page<Seller> sellerPage = new PageImpl<>(List.of(seller), PageRequest.of(0, 10), 1);
+        Page<SellerEntity> sellerPage = new PageImpl<>(List.of(seller), PageRequest.of(0, 10), 1);
         given(sellerRepository.findAll(any(Specification.class), any(Pageable.class))).willReturn(sellerPage);
 
         // when
@@ -64,23 +67,23 @@ class SellerServiceTest {
         var sortBy = SellerSortBy.NAME_ASC;
 
         // Create sellerInfo to be shared by multiple sellers
-        var sharedSellerInfo = SellerInfo.builder()
+        var sharedSellerInfo = SellerInfoEntity.builder()
                 .id(UUID.randomUUID())
                 .url("test.com")
                 .name("testSeller")
                 .country("testCountry")
                 .externalId(UUID.randomUUID().toString())
-                .marketplace(Marketplace.builder().id(UUID.randomUUID().toString()).build())
+                .marketplace(MarketplaceEntity.builder().id(UUID.randomUUID().toString()).build())
                 .build();
 
         // Create multiple sellers with the same sellerInfo but different producers
-        var producer1 = Producer.builder().id(UUID.randomUUID()).createdAt(LocalDateTime.now()).name("producer1").build();
+        var producer1 = ProducerEntity.builder().id(UUID.randomUUID()).createdAt(LocalDateTime.now()).name("producer1").build();
         var seller1 = initTestSeller(sharedSellerInfo, producer1);
 
-        var producer2 = Producer.builder().id(UUID.randomUUID()).createdAt(LocalDateTime.now()).name("producer2").build();
+        var producer2 = ProducerEntity.builder().id(UUID.randomUUID()).createdAt(LocalDateTime.now()).name("producer2").build();
         var seller2 = initTestSeller(sharedSellerInfo, producer2);
 
-        Page<Seller> sellerPage = new PageImpl<>(List.of(seller1, seller2), PageRequest.of(0, 10), 2);
+        Page<SellerEntity> sellerPage = new PageImpl<>(List.of(seller1, seller2), PageRequest.of(0, 10), 2);
         given(sellerRepository.findAll(any(Specification.class), any(Pageable.class))).willReturn(sellerPage);
 
         // when
@@ -92,20 +95,20 @@ class SellerServiceTest {
         assertEquals(2, sellerDto.getProducerSellerStates().size());
     }
 
-    private Seller initTestSeller() {
-        return Seller.builder()
+    private SellerEntity initTestSeller() {
+        return SellerEntity.builder()
                 .id(UUID.randomUUID())
-                .sellerInfo(SellerInfo.builder()
+                .sellerInfo(SellerInfoEntity.builder()
                         .id(UUID.randomUUID())
                         .url("test.com")
                         .name("testSeller")
                         .country("testCountry")
                         .externalId(UUID.randomUUID().toString())
-                        .marketplace(Marketplace.builder()
+                        .marketplace(MarketplaceEntity.builder()
                                 .id(UUID.randomUUID().toString())
                                 .build())
                         .build())
-                .producer(Producer.builder()
+                .producer(ProducerEntity.builder()
                         .id(UUID.randomUUID())
                         .createdAt(LocalDateTime.now())
                         .name("testProducerName")
@@ -114,8 +117,8 @@ class SellerServiceTest {
                 .build();
     }
 
-    private Seller initTestSeller(SellerInfo sellerInfo, Producer producer) {
-        return Seller.builder()
+    private SellerEntity initTestSeller(SellerInfoEntity sellerInfo, ProducerEntity producer) {
+        return SellerEntity.builder()
                 .id(UUID.randomUUID())
                 .sellerInfo(sellerInfo)
                 .producer(producer)

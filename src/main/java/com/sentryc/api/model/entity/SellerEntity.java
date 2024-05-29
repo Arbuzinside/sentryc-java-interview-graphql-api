@@ -1,4 +1,4 @@
-package com.sentryc.api.model;
+package com.sentryc.api.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,18 +11,18 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Seller {
+public class SellerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "producer_id")
-    private Producer producer;
+    private ProducerEntity producer;
 
     @ManyToOne
     @JoinColumn(name = "seller_info_id")
-    private SellerInfo sellerInfo;
+    private SellerInfoEntity sellerInfo;
 
     private String state;
 }

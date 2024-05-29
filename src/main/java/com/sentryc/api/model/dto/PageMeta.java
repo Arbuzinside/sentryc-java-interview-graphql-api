@@ -1,6 +1,6 @@
-package com.sentryc.api.resolver.model;
+package com.sentryc.api.model.dto;
 
-import com.sentryc.api.model.Seller;
+import com.sentryc.api.model.entity.SellerEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +17,7 @@ public class PageMeta {
     private int totalPages;
     private long totalElements;
 
-    public static PageMeta from(Page<Seller> page) {
+    public static PageMeta from(Page<SellerEntity> page) {
         return PageMeta.builder()
                 .currentPage(page.getNumber())
                 .pageSize(page.getSize())

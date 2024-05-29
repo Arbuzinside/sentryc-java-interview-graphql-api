@@ -1,6 +1,6 @@
-package com.sentryc.api.resolver.model;
+package com.sentryc.api.model.dto;
 
-import com.sentryc.api.model.Seller;
+import com.sentryc.api.model.entity.SellerEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,14 +12,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SellerDto {
+public class Seller {
     private String sellerName;
     private String externalId;
-    private List<ProducerSellerStateDto> producerSellerStates;
+    private List<ProducerSellerState> producerSellerStates;
     private String marketplaceId;
 
-    public static SellerDto from(Seller seller, List<ProducerSellerStateDto> producerSellerStates){
-        return SellerDto.builder()
+    public static Seller from(SellerEntity seller, List<ProducerSellerState> producerSellerStates){
+        return Seller.builder()
                 .sellerName(seller.getSellerInfo().getName())
                 .externalId(seller.getSellerInfo().getExternalId())
                 .producerSellerStates(producerSellerStates)

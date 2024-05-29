@@ -1,9 +1,9 @@
 package com.sentryc.api.resolver;
 
-import com.sentryc.api.resolver.model.PageInput;
-import com.sentryc.api.resolver.model.SellerFilter;
-import com.sentryc.api.resolver.model.SellerPageableResponse;
-import com.sentryc.api.resolver.model.SellerSortBy;
+import com.sentryc.api.model.dto.PageInput;
+import com.sentryc.api.model.dto.SellerFilter;
+import com.sentryc.api.model.dto.SellerPageableResponse;
+import com.sentryc.api.model.dto.SellerSortBy;
 import com.sentryc.api.service.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;

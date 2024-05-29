@@ -1,4 +1,4 @@
-package com.sentryc.api.model;
+package com.sentryc.api.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -14,7 +14,7 @@ import lombok.AllArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Marketplace {
+public class MarketplaceEntity {
     @Id
     private String id;
     private String description;

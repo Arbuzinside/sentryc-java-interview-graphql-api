@@ -1,8 +1,9 @@
 package com.sentryc.api.service;
 
-import com.sentryc.api.model.Seller;
+import com.sentryc.api.model.dto.*;
+import com.sentryc.api.model.entity.SellerEntity;
+import com.sentryc.api.model.entity.dto.*;
 import com.sentryc.api.repository.SellerRepository;
-import com.sentryc.api.resolver.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,9 +27,9 @@ public class SellerService {
 
     public SellerPageableResponse getSellers(SellerFilter filter, PageInput page, SellerSortBy sortBy) {
         var pageable = PageRequest.of(page.getPage(), page.getSize(), getSort(sortBy));
-        Specification<Seller> specs = createQuerySpecification(filter);
+        Specification<SellerEntity> specs = createQuerySpecification(filter);
 
-        Page<Seller> sellerPage = sellerRepository.findAll(specs, pageable);
+        Page<SellerEntity> sellerPage = sellerRepository.findAll(specs, pageable);
 
         var pageMeta = PageMeta.from(sellerPage);
 
@@ -60,19 +61,19 @@ public class SellerService {
         };
     }
 
-    private Specification<Seller> createQuerySpecification(SellerFilter filter) {
+    private Specification<SellerEntity> createQuerySpecification(SellerFilter filter) {
         return Specification.where(SellerSpecifications.searchByName(filter.getSearchByName()))
                 .and(SellerSpecifications.filterByProducerIds(filter.getProducerIds()))
                 .and(SellerSpecifications.filterByMarketplaceIds(filter.getMarketplaceIds()));
     }
 
-    private SellerDto mergeProducerSellerStates(List<Seller> sellers) {
-        Seller mainEntity = sellers.getFirst();
+    private Seller mergeProducerSellerStates(List<SellerEntity> sellers) {
+        SellerEntity mainEntity = sellers.getFirst();
 
-        List<ProducerSellerStateDto> allStates = sellers.stream()
-                .map(ProducerSellerStateDto::from)
+        List<ProducerSellerState> allStates = sellers.stream()
+                .map(ProducerSellerState::from)
                 .collect(Collectors.toList());
 
-        return SellerDto.from(mainEntity, allStates);
+        return Seller.from(mainEntity, allStates);
     }
 }
