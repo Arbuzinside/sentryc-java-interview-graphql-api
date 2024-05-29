@@ -2,12 +2,10 @@ package com.sentryc.api.service;
 
 import com.sentryc.api.model.Seller;
 import com.sentryc.api.repository.SellerRepository;
-import com.sentryc.api.repository.SellerSpecifications;
 import com.sentryc.api.resolver.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -27,7 +25,7 @@ public class SellerService {
     }
 
     public SellerPageableResponse getSellers(SellerFilter filter, PageInput page, SellerSortBy sortBy) {
-        Pageable pageable = PageRequest.of(page.getPage(), page.getSize(), getSort(sortBy));
+        var pageable = PageRequest.of(page.getPage(), page.getSize(), getSort(sortBy));
         Specification<Seller> specs = createQuerySpecification(filter);
 
         Page<Seller> sellerPage = sellerRepository.findAll(specs, pageable);

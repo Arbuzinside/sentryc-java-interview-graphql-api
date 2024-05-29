@@ -1,4 +1,4 @@
-package com.sentryc.api.repository;
+package com.sentryc.api.service;
 
 import com.sentryc.api.model.Seller;
 import org.springframework.data.jpa.domain.Specification;
