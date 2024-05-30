@@ -14,8 +14,12 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class SellerResolver {
 
+    private final SellerService sellerService;
+
     @Autowired
-    private SellerService sellerService;
+    public SellerResolver(SellerService sellerService){
+        this.sellerService = sellerService;
+    }
 
     @QueryMapping
     public SellerPageableResponse sellers(@Argument SellerFilter filter,

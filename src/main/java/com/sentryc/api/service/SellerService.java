@@ -2,7 +2,6 @@ package com.sentryc.api.service;
 
 import com.sentryc.api.model.dto.*;
 import com.sentryc.api.model.entity.SellerEntity;
-import com.sentryc.api.model.entity.dto.*;
 import com.sentryc.api.repository.SellerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
