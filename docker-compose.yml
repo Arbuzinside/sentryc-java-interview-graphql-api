@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_DB: sentryc_interview
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+      - ./populate-db.sh:/docker-entrypoint-initdb.d/populate-db.sh
+
+volumes:
+  pgdata:

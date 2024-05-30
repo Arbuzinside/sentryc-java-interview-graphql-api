@@ -1,9 +1,3 @@
-DROP DATABASE IF EXISTS sentryc_interview;
-CREATE DATABASE sentryc_interview;
-
--- Switch to the newly created database
-\c sentryc_interview;
-
 -- Drop tables if they exist
 DROP TABLE IF EXISTS sellers;
 DROP TABLE IF EXISTS seller_infos;

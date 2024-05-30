@@ -49,26 +49,3 @@ processResources {
 		expand( project.properties )
 	}
 }
-
-import java.nio.file.Files
-import java.nio.file.Paths
-
-task processYml {
-	doLast {
-		def ymlFile = file('src/main/resources/application.yml')
-		def content = ymlFile.text
-
-		def props = new Properties()
-		file('gradle.properties').withInputStream { stream ->
-			props.load(stream)
-		}
-
-		props.each { key, value ->
-			content = content.replace("\${${key}}", value)
-		}
-
-		Files.write(Paths.get('src/main/resources/application.yml'), content.bytes)
-	}
-}
-
-processResources.dependsOn processYml

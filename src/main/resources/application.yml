@@ -9,6 +9,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/sentryc_interview
     username: postgres
     password: mysecretpassword
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update

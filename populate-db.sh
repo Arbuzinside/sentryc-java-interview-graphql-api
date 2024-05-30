@@ -1,18 +1,18 @@
 #!/bin/bash
 
-# Docker container name
-CONTAINER_NAME="postgres"
+set -e
 
-# Database connection details
-DB_NAME="sentryc_interview"
-DB_USER="postgres"
+# Wait for PostgreSQL to be ready
+until psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c '\q'; do
+  >&2 echo "PostgreSQL is unavailable - sleeping"
+  sleep 1
+done
 
-# Temporary SQL file
-TEMP_SQL_FILE=$(mktemp)
+>&2 echo "PostgreSQL is up - executing commands"
 
 # Generate a random UUID
 generate_uuid() {
-    uuidgen
+    cat /proc/sys/kernel/random/uuid
 }
 
 # Generate random state
@@ -22,6 +22,7 @@ generate_random_state() {
 }
 
 # Generate random data and append to SQL file
+TEMP_SQL_FILE=$(mktemp)
 
 # Generate 50 marketplaces
 for i in {1..50}; do
@@ -52,18 +53,16 @@ done
 # Generate 1000 sellers
 for i in {1..1000}; do
     seller_id=$(generate_uuid)
-    producer_id=$(shuf -i 1-200 -n 1) # Randomly assign one of the 500 producers
+    producer_id=$(shuf -i 1-200 -n 1) # Randomly assign one of the 200 producers
     seller_info_id=$(shuf -i 1-200 -n 1) # Randomly assign one of the 200 seller_infos
     seller_state=$(generate_random_state)
     echo "INSERT INTO sellers (id, producer_id, seller_info_id, state) VALUES ('$seller_id', (SELECT id FROM producers OFFSET $((producer_id-1)) LIMIT 1), (SELECT id FROM seller_infos OFFSET $((seller_info_id-1)) LIMIT 1), '$seller_state');" >> $TEMP_SQL_FILE
 done
 
 # Execute all insert commands in a single docker exec call
-docker cp $TEMP_SQL_FILE $CONTAINER_NAME:/temp_insert.sql
-docker exec -i $CONTAINER_NAME psql -U $DB_USER -d $DB_NAME -f /temp_insert.sql
+psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f $TEMP_SQL_FILE
 
 # Clean up
 rm $TEMP_SQL_FILE
-docker exec -i $CONTAINER_NAME rm /temp_insert.sql
 
 echo "Database populated with random data."
